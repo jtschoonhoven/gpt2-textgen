@@ -15,6 +15,9 @@ DEFAULT_CHAR_LENGTH = 1024
 DEFAULT_CREATIVITY = 0.7
 
 
+"""
+Configure and generate the models used to generate text output.
+"""
 def train(
     tf_session: TfSession,
     file_path_input: str = DEFAULT_FILE_PATH_INPUT,
