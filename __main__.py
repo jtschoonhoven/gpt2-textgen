@@ -32,6 +32,7 @@ def train(
         file_path_input,
         model_name=MODEL_NAME,
         steps=training_steps,
+        overwrite=True,
     )
 
     return tf_session
@@ -57,7 +58,7 @@ def generate(
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--file-path-input', '-f', default=DEFAULT_FILE_PATH_INPUT)
-    parser.add_argument('--retrain', '-r', type=bool, default=False)
+    parser.add_argument('--retrain', '-r', action='store_true')
     parser.add_argument('--length', '-l', type=int, default=DEFAULT_CHAR_LENGTH)
     parser.add_argument('--training-steps', '-s', type=int, default=DEFAULT_TRAINING_STEPS)
     parser.add_argument('--creativity', '-c', type=float, default=DEFAULT_CREATIVITY)
@@ -67,10 +68,11 @@ if __name__ == '__main__':
     should_train: bool = args.retrain
     tf_session = gpt2.start_tf_sess()
 
-    try:
-        gpt2.load_gpt2(tf_session)
-    except FileNotFoundError:
-        should_train = True
+    if not should_train:
+        try:
+            gpt2.load_gpt2(tf_session)
+        except FileNotFoundError:
+            should_train = True
 
     if should_train:
         train(
